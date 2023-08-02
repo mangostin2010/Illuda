@@ -8,7 +8,6 @@ import time
 st.set_page_config(
     page_title="일루다랑 채팅",
     page_icon="👧",
-    }
 )
 
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
