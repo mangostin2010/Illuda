@@ -104,8 +104,8 @@ try:
                 st.markdown(prompt)
             st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
             item =  {"role": "user", "content": prompt}
-            messages.append(item)
-            debug.markdown(f"Applied user data successfully {prompt}")
+            if messages.append(item):
+                debug.markdown(f"Applied user data successfully {prompt}")
 
         def apply_bot():
             with st.chat_message("assistant"):
@@ -123,8 +123,8 @@ try:
 
                 message_placeholder.markdown(full_response)
                 messages.append(full_response)
-                st.session_state.messages.append({"role": "assistant", "content": full_response})
-            debug.markdown(f"Applied bot data successfully {full_response}")
+                if st.session_state.messages.append({"role": "assistant", "content": full_response}):
+                    debug.markdown(f"Applied bot data successfully {full_response}")
 
         if prompt:
             apply_user()
