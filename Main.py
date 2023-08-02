@@ -101,11 +101,11 @@ try:
         if prompt:
             with st.chat_message("user"):
                 st.markdown(prompt)
-                st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
-        
-                item =  {"role": "user", "content": prompt}
-                messages.append(item)
-                    
+            st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
+    
+            item =  {"role": "user", "content": prompt}
+            messages.append(item)
+
 
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()
