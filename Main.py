@@ -3,6 +3,8 @@ import streamlit_authenticator as stauth
 from dependancies import sign_up, fetch_users
 import socket # socket 모듈을 import합니다.
 from pathlib import Path
+import time
+
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 #st.set_page_config(page_title='AI Tools', page_icon='🤖', initial_sidebar_state="expanded")
 st.markdown("<style> ul {display: none;} </style>", unsafe_allow_html=True)
@@ -119,7 +121,9 @@ try:
                 message_placeholder.markdown(full_response)
             messages.append(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
-
+            prompt = st.chat_input(disabled=True)
+            time.sleep(1)
+            prompt = st.chat_input(disabled=False)
             
 
 except:
