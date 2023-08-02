@@ -6,7 +6,10 @@ Get the source code of Illuda
 ```python
 git clone https://github.com/mangostin2010/Illuda
 ```
-
+And go to the Illuda directory,
+```
+cd Illuda
+```
 Install required packages
 ```python
 python -m pip install -r requirements.txt
