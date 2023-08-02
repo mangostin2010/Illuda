@@ -117,9 +117,10 @@ try:
                     messages=messages,
                     stream=True,
                 ):
-                    time.sleep(0.1)
+                    
                     full_response += response.choices[0].delta.get("content", "")
                     final_response = message_placeholder.markdown(full_response + "▌")
+                    time.sleep(0.2)
                 st.session_state["last_received_time"] = time.time()
 
                 message_placeholder.markdown(full_response)
