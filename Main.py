@@ -91,7 +91,7 @@ try:
         with st.sidebar:
             st.write(f"Logged with {username}")
             Authenticator.logout(":red[Log Out]", 'main')
-        col1, col2, col3 = st.beta_columns([1,1,1])
+        col1, col2, col3 = st.columns([1,1,1])
         col2.button("test")
         prompt = st.chat_input("일루다에게 보내기")
         if prompt:
