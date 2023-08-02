@@ -126,8 +126,8 @@ try:
 
             messages.append(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
-            if time.time() - st.session_state["last_sent_time"] > 10:
-                st.error("죄송합니다! 일루다가 채팅을하다 핸드폰을 떨궜습니다!")
+            #if time.time() - st.session_state["last_sent_time"] > 10:
+                #st.error("죄송합니다! 일루다가 채팅을하다 핸드폰을 떨궜습니다!")
             
 
 except:
