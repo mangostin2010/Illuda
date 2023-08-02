@@ -111,18 +111,20 @@ try:
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()
                 full_response = ""
-        
-                for response in openai.ChatCompletion.create(
-                    model=st.session_state["openai_model"],
-                    messages=messages,
-                    stream=True,
-                ):
-                    
-                    full_response += response.choices[0].delta.get("content", "")
-                    final_response = message_placeholder.markdown(full_response + "▌")
-                    time.sleep(0.2)
+                def create_message():
+                    for response in openai.ChatCompletion.create(
+                        model=st.session_state["openai_model"],
+                        messages=messages,
+                        stream=True,
+                    ):
+                        full_response += response.choices[0].delta.get("content", "")
+                        final_response = message_placeholder.markdown(full_response + "▌")
+                        time.sleep(0.15)
+                    content = response.choices[0].delta.get("content", "")
+                    if not content:
+                        create_message()
+                create_message()
                 st.session_state["last_received_time"] = time.time()
-
                 message_placeholder.markdown(full_response)
 
             messages.append(full_response)
