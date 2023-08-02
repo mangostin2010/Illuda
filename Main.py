@@ -122,7 +122,7 @@ try:
                         final_response = message_placeholder.markdown(full_response + "▌")
                         time.sleep(0.15)
                     content = response.choices[0].delta.get("content", "")
-                    if not content:
+                    if not full_response:
                         create_message()
                 create_message()
                 st.session_state["last_received_time"] = time.time()
