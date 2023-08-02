@@ -122,5 +122,5 @@ try:
 
             
 
-except FileNotFoundError:
+except:
     st.success('이 페이지를 새로고침 해주세요.')
