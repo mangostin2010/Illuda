@@ -3,5 +3,4 @@ g4f
 streamlit_authenticator
 pathlib
 datetime
-re
 deta
