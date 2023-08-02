@@ -99,6 +99,7 @@ try:
         
         prompt = st.chat_input("일루다에게 보내기")
         if prompt:
+            st.session_state["last_sent_time"] = time.time()
             with st.chat_message("user"):
                 st.markdown(prompt)
             st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
@@ -119,11 +120,14 @@ try:
                     time.sleep(0.1)
                     full_response += response.choices[0].delta.get("content", "")
                     final_response = message_placeholder.markdown(full_response + "▌")
+                st.session_state["last_received_time"] = time.time()
 
                 message_placeholder.markdown(full_response)
 
             messages.append(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
+            if time.time() - st.session_state["last_sent_time"] > 10:
+                st.error("죄송합니다! 일루다가 채팅을하다 핸드폰을 떨궜습니다!")
             
 
 except:
