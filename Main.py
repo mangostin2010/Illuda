@@ -97,7 +97,7 @@ try:
             Authenticator.logout(":red[Log Out]", 'main')
         
         prompt = st.chat_input("일루다에게 보내기")
-        regen = st.button("답변 다시 생성하기")
+
         if prompt:
             with st.chat_message("user"):
                 st.markdown(prompt)
@@ -124,8 +124,5 @@ try:
                     print(messages)
                     st.session_state.messages.append({"role": "assistant", "content": full_response})
             Create_message()
-            if regen:
-                Create_message()
-
 except:
     st.success('이 페이지를 새로고침 해주세요.')
