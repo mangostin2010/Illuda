@@ -4,3 +4,4 @@ streamlit_authenticator
 pathlib
 datetime
 deta
+openai
