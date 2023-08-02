@@ -98,31 +98,36 @@ try:
         
         prompt = st.chat_input("일루다에게 보내기")
 
-        if prompt:
+        def apply_user():
             with st.chat_message("user"):
                 st.markdown(prompt)
             st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
             item =  {"role": "user", "content": prompt}
             messages.append(item)
-            print(messages)
-            
-            def Create_message():
-                with st.chat_message("assistant"):
-                    message_placeholder = st.empty()
-                    full_response = ""
-            
-                    for response in openai.ChatCompletion.create(
-                        model="gpt-3.5-turbo",
-                        messages=messages,
-                        stream=True     ):
-                            time.sleep(0.1)
-                            full_response += response.choices[0].delta.get("content", "")
-                            final_response = message_placeholder.markdown(full_response + "▌")
+            print("Applied user data successfully")
 
-                    message_placeholder.markdown(full_response)
-                    messages.append(full_response)
-                    print(messages)
-                    st.session_state.messages.append({"role": "assistant", "content": full_response})
-            Create_message()
+        def apply_bot():
+            with st.chat_message("assistant"):
+                message_placeholder = st.empty()
+                full_response = ""
+        
+                for response in openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages,
+                    stream=True     ):
+                        time.sleep(0.1)
+                        message_placeholder.markdown(full_response + "▌")
+                        full_response += response.choices[0].delta.get("content", "")
+                        
+
+                message_placeholder.markdown(full_response)
+                messages.append(full_response)
+                st.session_state.messages.append({"role": "assistant", "content": full_response})
+                print("Applied bot data successfully")
+
+        if prompt:
+            apply_user()
+            apply_bot()
+            
 except:
     st.success('이 페이지를 새로고침 해주세요.')
