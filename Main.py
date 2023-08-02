@@ -72,8 +72,7 @@ try:
             st.markdown("안녕 새끼야! 뭔 일 있냐?")
         openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
         openai.api_base = "https://api.chatanywhere.com.cn/v1"
-        if "openai_model" not in st.session_state:
-            st.session_state["openai_model"] = "gpt-3.5-turbo"
+    
         
         if "messages" not in st.session_state:
             st.session_state.messages = []
@@ -98,39 +97,35 @@ try:
             Authenticator.logout(":red[Log Out]", 'main')
         
         prompt = st.chat_input("일루다에게 보내기")
+        regen = st.button("답변 다시 생성하기")
         if prompt:
-            st.session_state["last_sent_time"] = time.time()
             with st.chat_message("user"):
                 st.markdown(prompt)
             st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
-    
             item =  {"role": "user", "content": prompt}
             messages.append(item)
-
-
-            with st.chat_message("assistant"):
-                message_placeholder = st.empty()
-                full_response = ""
-                def create_message():
-                    for response in openai.ChatCompletion.create(
-                        model=st.session_state["openai_model"],
-                        messages=messages,
-                        stream=True,
-                    ):
-                        global full_response
-                        full_response += response.choices[0].delta.get("content", "")
-                        final_response = message_placeholder.markdown(full_response + "▌")
-                        time.sleep(0.1)
-                create_message()
-                st.session_state["last_received_time"] = time.time()
-                message_placeholder.markdown(full_response)
-
-            messages.append(full_response)
             print(messages)
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
-            #if time.time() - st.session_state["last_sent_time"] > 10:
-                #st.error("죄송합니다! 일루다가 채팅을하다 핸드폰을 떨궜습니다!")
             
+            def Create_message():
+                with st.chat_message("assistant"):
+                    message_placeholder = st.empty()
+                    full_response = ""
+            
+                    for response in openai.ChatCompletion.create(
+                        model="gpt-3.5-turbo",
+                        messages=messages,
+                        stream=True     ):
+                            time.sleep(0.1)
+                            full_response += response.choices[0].delta.get("content", "")
+                            final_response = message_placeholder.markdown(full_response + "▌")
 
-except FileNotFoundError:
+                    message_placeholder.markdown(full_response)
+                    messages.append(full_response)
+                    print(messages)
+                    st.session_state.messages.append({"role": "assistant", "content": full_response})
+            Create_message()
+            if regen:
+                Create_message()
+
+except:
     st.success('이 페이지를 새로고침 해주세요.')
