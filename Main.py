@@ -5,6 +5,17 @@ import socket # socket 모듈을 import합니다.
 from pathlib import Path
 import time
 
+st.set_page_config(
+    page_title="일루다랑 채팅",
+    page_icon="👧",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
+)
+
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 #st.set_page_config(page_title='AI Tools', page_icon='🤖', initial_sidebar_state="expanded")
 st.markdown("<style> ul {display: none;} </style>", unsafe_allow_html=True)
