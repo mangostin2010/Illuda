@@ -5,3 +5,4 @@ pathlib
 datetime
 deta
 openai
+streamlit_extras
