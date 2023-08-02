@@ -100,6 +100,9 @@ try:
         prompt = st.chat_input("일루다에게 보내기")
         if prompt:
         
+            # 챗봇이 메시지를 보내기 전에, 메시지를 보낸 시간을 저장합니다.
+            st.session_state["last_sent_time"] = time.time()
+        
             st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
         
             item =  {"role": "user", "content": prompt}
@@ -119,9 +122,18 @@ try:
                     full_response += response.choices[0].delta.get("content", "")
                     final_response = message_placeholder.markdown(full_response + "▌")
         
+                # 챗봇이 메시지를 보낸 후에, 메시지를 받은 시간을 저장합니다.
+                st.session_state["last_received_time"] = time.time()
+        
                 message_placeholder.markdown(full_response)
             messages.append(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
+        
+            # 챗봇이 메시지를 보내는 데 걸리는 시간이 10초 이상이면, 에러 메시지를 표시합니다.
+            if time.time() - st.session_state["last_sent_time"] > 10:
+                with st.chat_message("assistant"):
+                    st.error("죄송합니다. 챗봇이 메시지를 보내는 데 문제가 발생했습니다. 다시 시도해 주세요.")
+
 
 
             
