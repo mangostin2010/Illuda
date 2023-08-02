@@ -121,9 +121,7 @@ try:
                 message_placeholder.markdown(full_response)
             messages.append(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
-            prompt = st.chat_input(disabled=True)
             time.sleep(1)
-            prompt = st.chat_input(disabled=False)
             
 
 except FileNotFoundError:
