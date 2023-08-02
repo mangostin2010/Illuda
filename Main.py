@@ -100,10 +100,7 @@ try:
         prompt = st.chat_input("일루다에게 보내기")
         if prompt:
         
-            st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
-        
-            item =  {"role": "user", "content": prompt}
-            messages.append(item)
+            
             with st.chat_message("user"):
                 st.markdown(prompt)
             with st.chat_message("assistant"):
@@ -118,7 +115,11 @@ try:
                     time.sleep(0.1)
                     full_response += response.choices[0].delta.get("content", "")
                     final_response = message_placeholder.markdown(full_response + "▌")
+                    
+                st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
         
+                item =  {"role": "user", "content": prompt}
+                messages.append(item)
                 message_placeholder.markdown(full_response)
             messages.append(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
