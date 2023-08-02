@@ -59,12 +59,12 @@ try:
         import streamlit as st
         import random
         from streamlit_extras.add_vertical_space import add_vertical_space
-
+        
         st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
-
+        
         #st.title("ChatGPT-like clone")
         ChatGPT = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
-
+        
         add_vertical_space(4)
         with st.chat_message("user"):
             st.markdown("안녕!")
@@ -74,54 +74,59 @@ try:
         openai.api_base = "https://api.chatanywhere.com.cn/v1"
         if "openai_model" not in st.session_state:
             st.session_state["openai_model"] = "gpt-3.5-turbo"
-
+        
         if "messages" not in st.session_state:
             st.session_state.messages = []
-
+        
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
         
-
-
+        
+        
         system = open('system.txt',mode='r', encoding='UTF8')
- 
+        
         #모든 텍스트를 가져온다.
         system = system.read()
-
+        
         messages=[
             {"role": "system", "content": system},
         ]
-
+        
         with st.sidebar:
             st.write(f"Logged with {username}")
             Authenticator.logout(":red[Log Out]", 'main')
+        
+        # Define a callback function to handle user input
+        def handle_input(prompt):
+            if prompt:
+        
+                st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
+        
+                item =  {"role": "user", "content": prompt}
+                messages.append(item)
+                with st.chat_message("user"):
+                    st.markdown(prompt)
+                with st.chat_message("assistant"):
+                    message_placeholder = st.empty()
+                    full_response = ""
+        
+                    for response in openai.ChatCompletion.create(
+                        model=st.session_state["openai_model"],
+                        messages=messages,
+                        stream=True,
+                    ):
+                        time.sleep(0.1)
+                        full_response += response.choices[0].delta.get("content", "")
+                        final_response = message_placeholder.markdown(full_response + "▌")
+        
+                    message_placeholder.markdown(full_response)
+                messages.append(full_response)
+                st.session_state.messages.append({"role": "assistant", "content": full_response})
+        
+        # Use the callback function as the on_submit parameter of the chat input widget
+        prompt = st.chat_input("일루다에게 보내기", on_submit=handle_input)
 
-        prompt = st.chat_input("일루다에게 보내기")
-        if prompt:
-
-            st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
-
-            item =  {"role": "user", "content": prompt}
-            messages.append(item)
-            with st.chat_message("user"):
-                st.markdown(prompt)
-            with st.chat_message("assistant"):
-                message_placeholder = st.empty()
-                full_response = ""
-
-                for response in openai.ChatCompletion.create(
-                    model=st.session_state["openai_model"],
-                    messages=messages,
-                    stream=True,
-                ):
-                    time.sleep(0.1)
-                    full_response += response.choices[0].delta.get("content", "")
-                    final_response = message_placeholder.markdown(full_response + "▌")
-
-                message_placeholder.markdown(full_response)
-            messages.append(full_response)
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
             
 
 except:
