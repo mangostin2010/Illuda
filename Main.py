@@ -54,7 +54,6 @@ try:
         import streamlit as st
         import random
         from streamlit_extras.add_vertical_space import add_vertical_space
-        import time
 
         st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 
@@ -94,17 +93,18 @@ try:
             Authenticator.logout(":red[Log Out]", 'main')
         
         prompt = st.chat_input("일루다에게 보내기")
-
+        with st.chat_message("user"):
+            st.markdown(prompt)
         if prompt:
             
             st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
 
             item =  {"role": "user", "content": prompt}
             messages.append(item)
-
+            '''
             with st.chat_message("user"):
                 st.markdown(prompt)
-
+            '''
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()
                 full_response = ""
@@ -121,7 +121,6 @@ try:
                 message_placeholder.markdown(full_response)
             messages.append(full_response)
             st.session_state.messages.append({"role": "assistant", "content": full_response})
-            time.sleep(1)
             
 
 except FileNotFoundError:
