@@ -97,35 +97,31 @@ try:
             st.write(f"Logged with {username}")
             Authenticator.logout(":red[Log Out]", 'main')
         
-        # Define a callback function to handle user input
-        def handle_input(prompt):
-            if prompt:
+        prompt = st.chat_input("일루다에게 보내기")
+        if prompt:
         
-                st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
+            st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
         
-                item =  {"role": "user", "content": prompt}
-                messages.append(item)
-                with st.chat_message("user"):
-                    st.markdown(prompt)
-                with st.chat_message("assistant"):
-                    message_placeholder = st.empty()
-                    full_response = ""
+            item =  {"role": "user", "content": prompt}
+            messages.append(item)
+            with st.chat_message("user"):
+                st.markdown(prompt)
+            with st.chat_message("assistant"):
+                message_placeholder = st.empty()
+                full_response = ""
         
-                    for response in openai.ChatCompletion.create(
-                        model=st.session_state["openai_model"],
-                        messages=messages,
-                        stream=True,
-                    ):
-                        time.sleep(0.1)
-                        full_response += response.choices[0].delta.get("content", "")
-                        final_response = message_placeholder.markdown(full_response + "▌")
+                for response in openai.ChatCompletion.create(
+                    model=st.session_state["openai_model"],
+                    messages=messages,
+                    stream=True,
+                ):
+                    time.sleep(0.1)
+                    full_response += response.choices[0].delta.get("content", "")
+                    final_response = message_placeholder.markdown(full_response + "▌")
         
-                    message_placeholder.markdown(full_response)
-                messages.append(full_response)
-                st.session_state.messages.append({"role": "assistant", "content": full_response})
-        
-        # Use the callback function as the on_submit parameter of the chat input widget
-        prompt = st.chat_input("일루다에게 보내기", on_submit=handle_input)
+                message_placeholder.markdown(full_response)
+            messages.append(full_response)
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 
             
