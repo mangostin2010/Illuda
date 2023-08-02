@@ -1,0 +1,8 @@
+streamlit
+g4f
+streamlit_authenticator
+socket
+pathlib
+datetime
+re
+deta
