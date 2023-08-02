@@ -133,5 +133,5 @@ try:
                 #st.error("죄송합니다! 일루다가 채팅을하다 핸드폰을 떨궜습니다!")
             
 
-except:
+except FileNotFoundError:
     st.success('이 페이지를 새로고침 해주세요.')
