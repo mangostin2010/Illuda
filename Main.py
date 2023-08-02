@@ -117,6 +117,7 @@ try:
                         messages=messages,
                         stream=True,
                     ):
+                        global full_response
                         full_response += response.choices[0].delta.get("content", "")
                         final_response = message_placeholder.markdown(full_response + "▌")
                         time.sleep(0.15)
