@@ -100,7 +100,7 @@ try:
             messages.append(item)
 
         def apply_bot():
-            with st.chat_message("assistant"):
+           # with st.chat_message("assistant"):
 
                 def create_resp():
                     message_placeholder = st.empty()
