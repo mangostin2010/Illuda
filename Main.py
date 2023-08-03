@@ -59,13 +59,11 @@ try:
         st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 
         #st.title("ChatGPT-like clone")
-        ChatGPT = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
+        Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
 
         add_vertical_space(4)
-        with st.chat_message("user"):
-            st.markdown("안녕!")
-        with st.chat_message("assistant"):
-            st.markdown("안녕 새끼야! 뭔 일 있냐?")
+
+
         openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
         openai.api_base = "https://api.chatanywhere.com.cn/v1"
 
@@ -103,26 +101,27 @@ try:
 
         def apply_bot():
             with st.chat_message("assistant"):
-                message_placeholder = st.empty()
-                full_response = ""
 
-                for response in openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=messages,
-                    stream=True     ):
-                        time.sleep(0.1)
-                        message_placeholder.markdown(full_response + "▌")
-                        full_response += response.choices[0].delta.get("content", "")
-                        
-
-                message_placeholder.markdown(full_response)
-                messages.append(full_response)
-                st.session_state.messages.append({"role": "assistant", "content": full_response})
+                def create_resp():
+                    message_placeholder = st.empty()
+                    full_response = ""
+                    for response in openai.ChatCompletion.create(
+                        model="gpt-3.5-turbo",
+                        messages=messages,
+                        stream=True     ):
+                            
+                            message_placeholder.markdown(full_response + "▌")
+                            full_response += response.choices[0].delta.get("content", "")
+                            time.sleep(0.1)
+                    message_placeholder.markdown(full_response)
+                    messages.append(full_response)
+                    st.session_state.messages.append({"role": "assistant", "content": full_response})
+                create_resp()
 
         if prompt:
             apply_user()
             apply_bot()
 
             
-except:
+except FileNotFoundError:
     st.success('이 페이지를 새로고침 해주세요.')
