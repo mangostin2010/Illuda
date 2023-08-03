@@ -103,19 +103,20 @@ try:
            # with st.chat_message("assistant"):
 
                 def create_resp():
-                    message_placeholder = st.empty()
-                    full_response = ""
-                    for response in openai.ChatCompletion.create(
-                        model="gpt-3.5-turbo",
-                        messages=messages,
-                        stream=True     ):
+                    with st.chat_message("assistant"):
+                        message_placeholder = st.empty()
+                        full_response = ""
+                        for response in openai.ChatCompletion.create(
+                            model="gpt-3.5-turbo",
+                            messages=messages,
+                            stream=True     ):
                             
-                            message_placeholder.markdown(full_response + "▌")
-                            full_response += response.choices[0].delta.get("content", "")
-                            time.sleep(0.1)
-                    message_placeholder.markdown(full_response)
-                    messages.append(full_response)
-                    st.session_state.messages.append({"role": "assistant", "content": full_response})
+                                message_placeholder.markdown(full_response + "▌")
+                                full_response += response.choices[0].delta.get("content", "")
+                                time.sleep(0.1)
+                        message_placeholder.markdown(full_response)
+                        messages.append(full_response)
+                        st.session_state.messages.append({"role": "assistant", "content": full_response})
                 create_resp()
 
         if prompt:
