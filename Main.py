@@ -55,12 +55,12 @@ try:
         import streamlit as st
         import random
         from streamlit_extras.add_vertical_space import add_vertical_space
-        
+
         st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
-        
+
         #st.title("ChatGPT-like clone")
         ChatGPT = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
-        
+
         add_vertical_space(4)
         with st.chat_message("user"):
             st.markdown("안녕!")
@@ -68,31 +68,30 @@ try:
             st.markdown("안녕 새끼야! 뭔 일 있냐?")
         openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
         openai.api_base = "https://api.chatanywhere.com.cn/v1"
-    
-        
+
+
         if "messages" not in st.session_state:
             st.session_state.messages = []
-        
+
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
-        
-        
-        
+
+
+
         system = open('system.txt',mode='r', encoding='UTF8')
-        
+
         #모든 텍스트를 가져온다.
         system = system.read()
-        
+
         messages=[
             {"role": "system", "content": f"{system} And the name of the user is {username}"},
         ]
-        
+
         with st.sidebar:
             st.write(f"Logged with {username}")
             Authenticator.logout(":red[Log Out]", 'main')
-            debug = st.expander("디버그 (개발 디버그용)")
-        
+
         prompt = st.chat_input("일루다에게 보내기")
 
         def apply_user():
@@ -100,14 +99,13 @@ try:
                 st.markdown(prompt)
             st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
             item =  {"role": "user", "content": prompt}
-            if messages.append(item):
-                debug.markdown(f"Applied user data successfully {prompt}")
+            messages.append(item)
 
         def apply_bot():
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()
                 full_response = ""
-        
+
                 for response in openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=messages,
@@ -119,12 +117,12 @@ try:
 
                 message_placeholder.markdown(full_response)
                 messages.append(full_response)
-                if st.session_state.messages.append({"role": "assistant", "content": full_response}):
-                    debug.markdown(f"Applied bot data successfully {full_response}")
+                st.session_state.messages.append({"role": "assistant", "content": full_response})
 
         if prompt:
             apply_user()
             apply_bot()
+
             
 except:
     st.success('이 페이지를 새로고침 해주세요.')
