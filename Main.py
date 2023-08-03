@@ -50,10 +50,6 @@ try:
         # let User see app
        # st.sidebar.subheader(f'Welcome {username}')
         st.markdown("<style> ul {display: block;} </style>", unsafe_allow_html=True)
-        #st.title(f"Welcome {username}🙂!")
-        #st.subheader("이곳은 AI 놀이터 입니다!")
-        #with st.sidebar:
-            #logout1 = st.button(":red[Log out]")
         
         import openai
         import streamlit as st
@@ -89,7 +85,7 @@ try:
         system = system.read()
         
         messages=[
-            {"role": "system", "content": system},
+            {"role": "system", "content": f"{system} And the name of the user is {username}"},
         ]
         
         with st.sidebar:
