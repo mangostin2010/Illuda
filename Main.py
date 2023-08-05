@@ -4,6 +4,11 @@ import time
 
 st.set_page_config(page_title="일루다랑 채팅", page_icon="👧",)
 
+st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
+
+openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
+openai.api_base = "https://api.chatanywhere.cn"
+
 # 일루다 이름 대문작만하게 박아놓기
 Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
 
@@ -11,12 +16,7 @@ with st.chat_message("user"):
     st.markdown("안녕")
 with st.chat_message("assistant"):
     st.markdown("안녕 새끼야! 뭐하냐?")
-
-st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
-
-openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
-openai.api_base = "https://api.chatanywhere.cn"
-
+    
 Chat_Model = "gpt-3.5-turbo"
 
 system = open('prompt.txt',mode='r', encoding='UTF8')
