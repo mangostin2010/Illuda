@@ -11,7 +11,7 @@ openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
 openai.api_base = "https://api.chatanywhere.cn"
 
 # 일루다 이름 대문작만하게 박아놓기
-Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
+Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다👧</h1>", unsafe_allow_html=True)
 
 add_vertical_space(3)
 
