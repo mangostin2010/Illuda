@@ -2,14 +2,15 @@ import streamlit as st
 import openai
 import time
 
+st.set_page_config(page_title="일루다랑 채팅", page_icon="👧",)
+
+# 일루다 이름 대문작만하게 박아놓기
+Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
 
 with st.chat_message("user"):
     st.markdown("안녕")
 with st.chat_message("assistant"):
     st.markdown("안녕 새끼야! 뭐하냐?")
-
-
-st.set_page_config(page_title="일루다랑 채팅", page_icon="👧",)
 
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
 
@@ -35,8 +36,6 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-# 일루다 이름 대문작만하게 박아놓기
-Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
 
 #사용자의 인풋을 받아오는 chat_input
 User_Message = st.chat_input("일루다에게 보내기")
