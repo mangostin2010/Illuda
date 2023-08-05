@@ -1,6 +1,7 @@
 import streamlit as st
 import openai
 import time
+from streamlit_extras.add_vertical_space import add_vertical_space
 
 st.set_page_config(page_title="일루다랑 채팅", page_icon="👧")
 
@@ -11,6 +12,8 @@ openai.api_base = "https://api.chatanywhere.cn"
 
 # 일루다 이름 대문작만하게 박아놓기
 Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
+
+add_vertical_space(3)
 
 with st.chat_message("user"):
     st.markdown("안녕")
