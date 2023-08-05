@@ -1,128 +1,60 @@
 import streamlit as st
-import streamlit_authenticator as stauth
-from dependancies import sign_up, fetch_users
-import socket # socket 모듈을 import합니다.
-from pathlib import Path
+import openai
 import time
 
-st.set_page_config(
-    page_title="일루다랑 채팅",
-    page_icon="👧",
-)
+st.set_page_config(page_title="일루다랑 채팅", page_icon="👧",)
 
 st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
-#st.set_page_config(page_title='AI Tools', page_icon='🤖', initial_sidebar_state="expanded")
-st.markdown("<style> ul {display: none;} </style>", unsafe_allow_html=True)
 
-try:
-    users = fetch_users()
-    emails = []
-    usernames = []
-    passwords = []
+openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
+openai.api_base = "https://api.chatanywhere.cn"
 
-    for user in users:
-        emails.append(user['key'])
-        usernames.append(user['username'])
-        passwords.append(user['password'])
+Chat_Model = "gpt-3.5-turbo"
 
-    credentials = {'usernames': {}}
-    for index in range(len(emails)):
-        credentials['usernames'][usernames[index]] = {'name': emails[index], 'password': passwords[index]}
+system = open('prompt.txt',mode='r', encoding='UTF8')
 
-    Authenticator = stauth.Authenticate(credentials, cookie_name='Streamlit', key='abcdef', cookie_expiry_days=20)
+#모든 텍스트를 가져온다.
+system = system.read()
 
-    email, authentication_status, username = Authenticator.login(':green[Login]', 'main')
+#일루다에게 보낼 메시지 관리
+messages=[
+    {"role": "system", "content": system},
+]
 
-    info, info1 = st.columns(2)
+#streamlit 세션관리
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    if not authentication_status:
-        if username:
-            if username in usernames:
-                with info:
-                    st.error('Incorrect Password or username')
-            else:
-                st.error("유효하지 않은 계정입니다. 계정을 만들어 주세요.")
-                sign_up()
-        else:
-            sign_up()
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-    else:
-        # let User see app
-       # st.sidebar.subheader(f'Welcome {username}')
-        st.markdown("<style> ul {display: block;} </style>", unsafe_allow_html=True)
-        
-        import openai
-        import streamlit as st
-        import random
-        from streamlit_extras.add_vertical_space import add_vertical_space
+#사용자의 인풋을 받아오는 chat_input
+User_Message = st.chat_input("일루다에게 보내기")
 
-        st.markdown('<style>' + open('./style.css').read() + '</style>', unsafe_allow_html=True)
-
-        #st.title("ChatGPT-like clone")
-        Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1>", unsafe_allow_html=True)
-
-        add_vertical_space(4)
-
-
-        openai.api_key = "sk-ERbEZ6g35cYPM7DcMylctYXpg92zF60UaaVGMZWfPU1x7dpX"
-        openai.api_base = "https://api.chatanywhere.com.cn/v1"
-
-
-        if "messages" not in st.session_state:
-            st.session_state.messages = []
-
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
-
-
-
-        system = open('system.txt',mode='r', encoding='UTF8')
-
-        #모든 텍스트를 가져온다.
-        system = system.read()
-
-        messages=[
-            {"role": "system", "content": f"{system} And the name of the user is {username}"},
-        ]
-
-        with st.sidebar:
-            st.write(f"Logged with {username}")
-            Authenticator.logout(":red[Log Out]", 'main')
-
-        prompt = st.chat_input("일루다에게 보내기")
-
-        def apply_user():
-            with st.chat_message("user"):
-                st.markdown(prompt)
-            st.session_state.messages.append({"role": "user", "content": f"{prompt}"})
-            item =  {"role": "user", "content": prompt}
+#만약 사용자가 메시지를 보냈다면,
+if User_Message:
+    #유저 메시지 세션에 저장
+    def Write_UserMessage():
+        Chat_User = st.chat_message("user")
+        if Chat_User.markdown(User_Message):
+            item =  {"role": "user", "content": User_Message}
             messages.append(item)
+            st.session_state.messages.append({"role": "user", "content": User_Message})
+    #챗봇 메시지를 실시간으로 생성하고 그걸 챗봇 메시지 세션에 저장
+    def Write_BotMessage():
+        with st.chat_message("assistant"):
+            message_placeholder = st.empty()
+            full_response = ""
+            for response in openai.ChatCompletion.create(model=Chat_Model, messages=messages,
+                stream=True,
+            ):
+                full_response += response.choices[0].delta.get("content", "")
+                message_placeholder.markdown(full_response + "▌")
+                time.sleep(0.1)
+            message_placeholder.markdown(full_response)
+            messages.append(full_response)
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-        def apply_bot():
-           # with st.chat_message("assistant"):
-
-                def create_resp():
-                    with st.chat_message("assistant"):
-                        message_placeholder = st.empty()
-                        full_response = ""
-                        for response in openai.ChatCompletion.create(
-                            model="gpt-3.5-turbo",
-                            messages=messages,
-                            stream=True     ):
-                            
-                                message_placeholder.markdown(full_response + "▌")
-                                full_response += response.choices[0].delta.get("content", "")
-                                time.sleep(0.1)
-                        message_placeholder.markdown(full_response)
-                        messages.append(full_response)
-                        st.session_state.messages.append({"role": "assistant", "content": full_response})
-                create_resp()
-
-        if prompt:
-            apply_user()
-            apply_bot()
-
-            
-except FileNotFoundError:
-    st.success('이 페이지를 새로고침 해주세요.')
+    Write_UserMessage()
+    Write_BotMessage()
