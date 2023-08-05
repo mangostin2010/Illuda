@@ -34,6 +34,9 @@ Title = st.markdown("<h1 style='text-align: center; color: white;'>일루다</h1
 #사용자의 인풋을 받아오는 chat_input
 User_Message = st.chat_input("일루다에게 보내기")
 
+st.session_state.messages.append({"role": "user", "content": "안녕"})
+st.session_state.messages.append({"role": "assistant", "content": "안녕 새끼야! 뭐하냐?"})
+
 #만약 사용자가 메시지를 보냈다면,
 if User_Message:
     #유저 메시지 세션에 저장
