@@ -1,8 +1,6 @@
 streamlit
 g4f
-streamlit_authenticator
 pathlib
 datetime
-deta
 openai
 streamlit_extras
